@@ -1,0 +1,90 @@
+apply plugin:'java'
+//apply plugin:'checkstyle'
+//apply plugin:'findbugs'
+//apply plugin:'pmd'
+apply plugin: 'com.google.protobuf'
+
+sourceCompatibility = 1.7
+version ='1.0'
+description = 'A simple grpc example with gradle'
+
+
+repositories {
+    mavenCentral()
+}
+
+
+
+dependencies {
+    testCompile group:'junit', name:'junit', version:'4.11'
+
+    //protobuf + grpc
+    compile 'io.grpc:grpc-netty:1.8.0'
+    compile 'io.grpc:grpc-protobuf:1.8.0'
+    compile 'io.grpc:grpc-stub:1.8.0'
+
+}
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': description,
+                   'Implementation-Version': version
+    }
+}
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    // ASSUMES GRADLE 2.12 OR HIGHER. Use plugin version 0.7.5 with earlier
+    // gradle versions
+    classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.1'
+  }
+}
+
+sourceSets {
+    main {
+        proto {
+            srcDir 'src/main/proto'
+        }
+        java {
+            // include self written and generated code
+            srcDirs 'src/main/java', 'src-gen/main/grpc', 'src-gen/main/java'
+        }
+    }
+    // in future add test configuration here
+}
+
+
+protobuf {
+  protoc {
+    artifact = "com.google.protobuf:protoc:3.5.0"
+  }
+  plugins {
+    grpc {
+      artifact = 'io.grpc:protoc-gen-grpc-java:1.8.0'
+    }
+  }
+
+  generateProtoTasks.generatedFilesBaseDir = 'src-gen'
+  generateProtoTasks {
+    all()*.plugins {
+      grpc {}
+    }
+  }
+}
+
+//delete generated source code when clean
+clean {
+    delete "src-gen"
+}
+
+
+//call it as ./gradlew hello
+task hello {
+    description = "Greets at the end of the process"
+    doLast {
+        println 'Hello, World!'
+    }
+}
