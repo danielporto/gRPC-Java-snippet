@@ -1,6 +1,6 @@
 
 Example of a simple client server in java using GRPC with synchonous and asynchonous calls.
-This is built with gradle.
+This is built with gradle version 6.7.1
 To run it, import the gradle file into the intellij idea or run gradle build
 
 

@@ -7,9 +7,9 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 
 public class MyBlockingGreetingClient {
-    public static void main(String args []) {
-        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 8080)
-                .usePlaintext(true)
+    public static void main(String[] args) {
+        ManagedChannel channel = ManagedChannelBuilder.forAddress("localhost", 9777)
+                .usePlaintext()
                 .build();
 
         GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
