@@ -126,8 +126,17 @@ task helloClient(type: CreateStartScripts) {
     classpath = startScripts.classpath
 }
 
+task helloClientAsync(type: CreateStartScripts) {
+    mainClassName = 'com.example.grpc.client.MyAsyncGreetingClient'
+    applicationName = 'hello-world-client-async'
+    outputDir = new File(project.buildDir, 'tmp')
+    classpath = startScripts.classpath
+}
+
+
 applicationDistribution.into('bin') {
     from(helloServer)
     from(helloClient)
+    from(helloClientAsync)
     fileMode = 0755
 }
