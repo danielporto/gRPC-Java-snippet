@@ -1,10 +1,15 @@
 
-Example of a simple client server in java using GRPC with synchonous and asynchonous calls.
+Example of a simple client server in java using GRPC with synchronous and asynchronous calls.
 This is built with gradle version 6.7.1
 To run it, import the gradle file into the intellij idea or run gradle build
 
 
 based on
+BEST: https://codelabs.developers.google.com/codelabs/cloud-grpc-java
+
+also some good examples here: https://www.vinsguru.com/grpc-unary-api-in-java/
+
+
 https://www.jetbrains.com/help/idea/gradle.html
 https://stackoverflow.com/questions/32820728/simple-protobuf-compilation-with-gradle
 https://guides.gradle.org/creating-new-gradle-builds/

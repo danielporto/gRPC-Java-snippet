@@ -4,7 +4,7 @@ plugins {
     // Provide convenience executables for trying out the examples.
     id 'application'
     // ASSUMES GRADLE 5.6 OR HIGHER. Use plugin version 0.8.10 with earlier gradle versions
-    id 'com.google.protobuf' version '0.8.16'
+    id 'com.google.protobuf' version '0.8.17'
     // Generate IntelliJ IDEA's .idea & .iml project files
     id 'idea'
     // java stuff
@@ -23,18 +23,31 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+mainClassName = 'com.example.grpc.Main'
+project.version ='1.1'
+description = 'A simple gRPC example'
+
+
 // updating the version in our release process.
 def grpcVersion = '1.39.0' // CURRENT_GRPC_VERSION
 def protobufVersion = '3.17.2'
 def protocVersion = protobufVersion
 
-project.version ='1.1'
-description = 'A simple grpc example with gradle'
-
 dependencies {
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"
     implementation "io.grpc:grpc-stub:${grpcVersion}"
     compileOnly "org.apache.tomcat:annotations-api:6.0.53"
+
+
+    // command line argument parsing
+    // https://mvnrepository.com/artifact/commons-cli/commons-cli
+    implementation "commons-cli:commons-cli:1.4"
+
+    //logging
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
+    implementation "org.slf4j:slf4j-api:1.7.25"
+    implementation "org.slf4j:slf4j-log4j12:1.7.25"
 
     // examples/advanced need this for JsonFormat
     implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
@@ -80,9 +93,16 @@ startScripts.enabled = false
 
 jar {
     manifest {
-        attributes 'Implementation-Title': description,
-                   'Implementation-Version': project.version
+        attributes ( 'Main-Class': mainClassName,
+                    'Implementation-Title': description,
+                    'Implementation-Version': project.version
+        )
     }
+    archiveBaseName = project.name + '-all'
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+    //with jar
 }
 
 
@@ -108,6 +128,6 @@ task helloClient(type: CreateStartScripts) {
 
 applicationDistribution.into('bin') {
     from(helloServer)
-    // from(helloWorldClient)
+    from(helloClient)
     fileMode = 0755
 }
