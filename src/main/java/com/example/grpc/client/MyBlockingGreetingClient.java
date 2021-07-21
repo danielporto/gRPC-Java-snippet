@@ -13,13 +13,19 @@ public class MyBlockingGreetingClient {
                 .build();
 
         GreetingServiceGrpc.GreetingServiceBlockingStub stub = GreetingServiceGrpc.newBlockingStub(channel);
-        HelloResponse response = stub.greeting(HelloRequest.newBuilder()
-                .setName("Daniel")
-                .setAge(35)
+
+        HelloRequest request = HelloRequest.newBuilder().setName("Daniel")
+                .setAge(39)
                 .addHobbies("Coding")
                 .addHobbies("Travelling")
                 .putBagOfTricks("Coding tutorial", "Somewhat cool")
-                .build());
+                .build();
+
+        HelloResponse response = stub.greeting(request);
+
         System.out.println(response);
+        // A Channel should be shutdown before stopping the process.
+
+        channel.shutdownNow();
     }
 }
